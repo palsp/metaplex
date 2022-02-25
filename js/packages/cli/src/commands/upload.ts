@@ -46,6 +46,9 @@ export async function uploadV2({
   anchorProgram,
   arweaveJwk,
   rateLimit,
+  customUrl,
+  customImageUrl,
+  imageType,
 }: {
   files: string[];
   cacheName: string;
@@ -83,6 +86,9 @@ export async function uploadV2({
   anchorProgram: Program;
   arweaveJwk: string;
   rateLimit: number;
+  customUrl: string;
+  customImageUrl: string;
+  imageType: string;
 }): Promise<boolean> {
   let uploadSuccessful = true;
   const savedContent = loadCache(cacheName, env);
@@ -230,6 +236,8 @@ export async function uploadV2({
                   : `${assetKey.index}.json`,
               );
 
+              const key = assetKey.index.replace('.json', '');
+
               if (
                 allIndexesInSlice[i] >= lastPrinted + tick ||
                 allIndexesInSlice[i] === 0
@@ -284,6 +292,12 @@ export async function uploadV2({
                       animation,
                       manifestBuffer,
                     );
+                    break;
+                  case StorageType.Custom:
+                    [link, imageLink] = [
+                      `${customUrl}/${key}`,
+                      `${customImageUrl}/${key}.${imageType}`,
+                    ];
                     break;
                   case StorageType.Arweave:
                   default:

@@ -121,6 +121,9 @@ programCommand('upload')
       whitelistMintSettings,
       goLiveDate,
       uuid,
+      customUrl,
+      customImageUrl,
+      imageType,
     } = await getCandyMachineV2Config(walletKeyPair, anchorProgram, configPath);
 
     if (storage === StorageType.ArweaveSol && env !== 'mainnet-beta') {
@@ -159,6 +162,31 @@ programCommand('upload')
         'aws selected as storage option but existing bucket name (--aws-s3-bucket) not provided.',
       );
     }
+
+    if (storage === StorageType.Custom && !customUrl) {
+      if (!customUrl) {
+        throw new Error(
+          'custom selected as storage option but custom URL not provided',
+        );
+      }
+
+      if (!customImageUrl) {
+        throw new Error(
+          'custom selected as storage option but custom image URL not provided',
+        );
+      }
+
+      if (!imageType) {
+        throw new Error(
+          'custom selected as storage option but image extension not provided',
+        );
+      }
+
+      if (!supportedImageTypes[`image/${imageType}`]) {
+        throw new Error('unsupported image file extension');
+      }
+    }
+
     if (!Object.values(StorageType).includes(storage)) {
       throw new Error(
         `Storage option must either be ${Object.values(StorageType).join(
@@ -250,6 +278,9 @@ programCommand('upload')
         uuid,
         arweaveJwk,
         rateLimit,
+        customUrl,
+        customImageUrl,
+        imageType,
       });
     } catch (err) {
       log.warn('upload was not successful, please re-run.', err);

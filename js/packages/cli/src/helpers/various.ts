@@ -47,6 +47,9 @@ export async function getCandyMachineV2Config(
   goLiveDate: BN | null;
   uuid: string;
   arweaveJwk: string;
+  customUrl: string | null;
+  customImageUrl: string | null;
+  imageType: string | null;
 }> {
   if (configPath === undefined) {
     throw new Error('The configPath is undefined');
@@ -77,6 +80,9 @@ export async function getCandyMachineV2Config(
     goLiveDate,
     uuid,
     arweaveJwk,
+    customUrl,
+    customImageUrl,
+    imageType,
   } = config;
 
   let wallet;
@@ -205,6 +211,9 @@ export async function getCandyMachineV2Config(
     goLiveDate: goLiveDate ? new BN(parseDate(goLiveDate)) : null,
     uuid,
     arweaveJwk,
+    customUrl,
+    customImageUrl,
+    imageType,
   };
 }
 export async function readJsonFile(fileName: string) {
