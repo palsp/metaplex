@@ -8,7 +8,7 @@ import {
 } from '../helpers/accounts';
 import { PublicKey } from '@solana/web3.js';
 import fs from 'fs';
-import { BN, Program, web3 } from '@project-serum/anchor';
+import { BN } from '@project-serum/anchor';
 
 import { loadCache, saveCache } from '../helpers/cache';
 import { arweaveUpload } from '../helpers/upload/arweave';
@@ -49,47 +49,7 @@ export async function uploadV2({
   customUrl,
   customImageUrl,
   imageType,
-}: {
-  files: string[];
-  cacheName: string;
-  env: string;
-  totalNFTs: number;
-  storage: string;
-  retainAuthority: boolean;
-  mutable: boolean;
-  nftStorageKey: string;
-  ipfsCredentials: ipfsCreds;
-  awsS3Bucket: string;
-  batchSize: number;
-  price: BN;
-  treasuryWallet: PublicKey;
-  splToken: PublicKey;
-  gatekeeper: null | {
-    expireOnUse: boolean;
-    gatekeeperNetwork: web3.PublicKey;
-  };
-  goLiveDate: null | BN;
-  endSettings: null | [number, BN];
-  whitelistMintSettings: null | {
-    mode: any;
-    mint: PublicKey;
-    presale: boolean;
-    discountPrice: null | BN;
-  };
-  hiddenSettings: null | {
-    name: string;
-    uri: string;
-    hash: Uint8Array;
-  };
-  uuid: string;
-  walletKeyPair: web3.Keypair;
-  anchorProgram: Program;
-  arweaveJwk: string;
-  rateLimit: number;
-  customUrl: string;
-  customImageUrl: string;
-  imageType: string;
-}): Promise<boolean> {
+}: UploadV2): Promise<boolean> {
   let uploadSuccessful = true;
   const savedContent = loadCache(cacheName, env);
   const cacheContent = savedContent || {};
@@ -464,16 +424,7 @@ async function writeIndices({
   walletKeyPair,
   uploadSuccessful,
   rateLimit,
-}: {
-  anchorProgram: Program;
-  cacheContent: any;
-  cacheName: string;
-  env: any;
-  candyMachine: any;
-  walletKeyPair: web3.Keypair;
-  uploadSuccessful: boolean;
-  rateLimit: number;
-}) {
+}: WriteIndices) {
   const keys = Object.keys(cacheContent.items);
   try {
     let promiseArray = [];
